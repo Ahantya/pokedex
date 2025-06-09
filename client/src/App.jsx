@@ -1,4 +1,6 @@
+// App.jsx
 import { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom'
 import './App.css'
 
 function App() {
@@ -23,6 +25,13 @@ function App() {
               id: details.id,
               types: details.types.map((t) => t.type.name),
               imageUrl: details.sprites.front_default,
+              hp: details.stats[0].base_stat,
+              attack: details.stats[1].base_stat,
+              defense: details.stats[2].base_stat,
+              speed: details.stats[5].base_stat,
+              height: details.height,
+              weight: details.weight,
+              abilities: details.abilities.map((a) => a.ability.name),
             }
           })
         )
@@ -63,68 +72,121 @@ function App() {
     })
 
   return (
-    <div className="App">
-      <h1>PookieDex</h1>
+    <Router>
+      <div className="App">
+        <h1>PookieDex</h1>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Filters
+                  searchTerm={searchTerm}
+                  setSearchTerm={setSearchTerm}
+                  selectedRegion={selectedRegion}
+                  setSelectedRegion={setSelectedRegion}
+                  selectedType={selectedType}
+                  setSelectedType={setSelectedType}
+                />
+                <div className="pokemon-grid">
+                  {filteredPokemon.map((pokemon) => (
+                    <Link
+                      to={`/pokemon/${pokemon.id}`}
+                      key={pokemon.id}
+                      className="pokemon-card"
+                    >
+                      <img src={pokemon.imageUrl} alt={pokemon.name} />
+                      <h3>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
+                      <p className="poke-id">#{pokemon.id}</p>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            }
+          />
 
-      <div className="filters">
-        <input
-          type="text"
-          placeholder="Search Pokémon..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-
-        <select
-          value={selectedRegion}
-          onChange={(e) => setSelectedRegion(e.target.value)}
-        >
-          <option value="all">🌍 All Regions</option>
-          <option value="kanto">Kanto</option>
-          <option value="johto">Johto</option>
-          <option value="hoenn">Hoenn</option>
-          <option value="sinnoh">Sinnoh</option>
-          <option value="unova">Unova</option>
-          <option value="kalos">Kalos</option>
-          <option value="alola">Alola</option>
-          <option value="galar">Galar</option>
-          <option value="paldea">Paldea</option>
-        </select>
-
-        <select
-          value={selectedType}
-          onChange={(e) => setSelectedType(e.target.value)}
-        >
-          <option value="all">🧃 All Types</option>
-          <option value="normal">Normal</option>
-          <option value="fire">Fire</option>
-          <option value="water">Water</option>
-          <option value="grass">Grass</option>
-          <option value="electric">Electric</option>
-          <option value="ice">Ice</option>
-          <option value="fighting">Fighting</option>
-          <option value="poison">Poison</option>
-          <option value="ground">Ground</option>
-          <option value="flying">Flying</option>
-          <option value="psychic">Psychic</option>
-          <option value="bug">Bug</option>
-          <option value="rock">Rock</option>
-          <option value="ghost">Ghost</option>
-          <option value="dark">Dark</option>
-          <option value="dragon">Dragon</option>
-          <option value="steel">Steel</option>
-          <option value="fairy">Fairy</option>
-        </select>
+          <Route
+            path="/pokemon/:id"
+            element={<PokemonDetail pokemonList={pokemonList} />}
+          />
+        </Routes>
       </div>
+    </Router>
+  )
+}
 
-      <div className="pokemon-grid">
-        {filteredPokemon.map((pokemon) => (
-          <div className="pokemon-card" key={pokemon.id}>
-            <img src={pokemon.imageUrl} alt={pokemon.name} />
-            <h3>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
-            <p className="poke-id">#{pokemon.id}</p>
-          </div>
-        ))}
-      </div>
+function Filters({ searchTerm, setSearchTerm, selectedRegion, setSelectedRegion, selectedType, setSelectedType }) {
+  return (
+    <div className="filters">
+      <input
+        type="text"
+        placeholder="Search Pokémon..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+
+      <select
+        value={selectedRegion}
+        onChange={(e) => setSelectedRegion(e.target.value)}
+      >
+        <option value="all">🌍 All Regions</option>
+        <option value="kanto">Kanto</option>
+        <option value="johto">Johto</option>
+        <option value="hoenn">Hoenn</option>
+        <option value="sinnoh">Sinnoh</option>
+        <option value="unova">Unova</option>
+        <option value="kalos">Kalos</option>
+        <option value="alola">Alola</option>
+        <option value="galar">Galar</option>
+        <option value="paldea">Paldea</option>
+      </select>
+
+      <select
+        value={selectedType}
+        onChange={(e) => setSelectedType(e.target.value)}
+      >
+        <option value="all">🧃 All Types</option>
+        <option value="normal">Normal</option>
+        <option value="fire">Fire</option>
+        <option value="water">Water</option>
+        <option value="grass">Grass</option>
+        <option value="electric">Electric</option>
+        <option value="ice">Ice</option>
+        <option value="fighting">Fighting</option>
+        <option value="poison">Poison</option>
+        <option value="ground">Ground</option>
+        <option value="flying">Flying</option>
+        <option value="psychic">Psychic</option>
+        <option value="bug">Bug</option>
+        <option value="rock">Rock</option>
+        <option value="ghost">Ghost</option>
+        <option value="dark">Dark</option>
+        <option value="dragon">Dragon</option>
+        <option value="steel">Steel</option>
+        <option value="fairy">Fairy</option>
+      </select>
+    </div>
+  )
+}
+
+function PokemonDetail({ pokemonList }) {
+  const { id } = useParams()
+  const pokemon = pokemonList.find((p) => p.id === Number(id))
+
+  if (!pokemon) {
+    return <p>Loading Pokémon data... 🥒⏳</p>
+  }
+
+  return (
+    <div className="pokemon-detail">
+      <h2>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} #{pokemon.id}</h2>
+      <img src={pokemon.imageUrl} alt={pokemon.name} />
+      <p><strong>Types:</strong> {pokemon.types.join(', ')}</p>
+      <p><strong>Abilities:</strong> {pokemon.abilities.join(', ')}</p>
+      <p><strong>HP:</strong> {pokemon.hp} | <strong>Attack:</strong> {pokemon.attack} | <strong>Defense:</strong> {pokemon.defense}</p>
+      <p><strong>Speed:</strong> {pokemon.speed}</p>
+      <p><strong>Height:</strong> {pokemon.height / 10} m | <strong>Weight:</strong> {pokemon.weight / 10} kg</p>
+      <button onClick={() => window.history.back()}>← Back to PookieDex</button>
     </div>
   )
 }

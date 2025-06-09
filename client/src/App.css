@@ -130,3 +130,96 @@ h1 {
   cursor: pointer;
 }
 
+.pokemon-card {
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.pokemon-card.expanded {
+  transform: scale(1.05);
+  background: radial-gradient(circle at top left, #ffe0f0, #cdefff);
+}
+
+.extra-info {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #444;
+}
+
+
+.pokemon-detail {
+  max-width: 600px;
+  background: white;
+  margin: 20px auto;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  text-align: center;
+  color: #2e2e2e;
+}
+
+.pokemon-detail img {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 20px;
+}
+
+.pokemon-detail h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  color: #4caf50;
+}
+
+.pokemon-detail p {
+  font-size: 1.1rem;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.pokemon-detail strong {
+  color: #388e3c;
+}
+
+.pokemon-detail button {
+  margin-top: 25px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 25px;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  user-select: none;
+}
+
+.pokemon-detail button:hover {
+  background-color: #388e3c;
+  box-shadow: 0 6px 18px rgba(56, 142, 60, 0.6);
+}
+
+/* Responsive text scaling on smaller screens */
+@media (max-width: 480px) {
+  .pokemon-detail {
+    padding: 20px 15px;
+  }
+
+  .pokemon-detail h2 {
+    font-size: 2rem;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters input[type="text"],
+  .filters select {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+
