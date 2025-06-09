@@ -478,3 +478,57 @@ body, .pokemon-detail, .pokemon-card, h1, h2, h3, p, button {
     font-size: 1rem;
   }
 }
+
+
+/* iPad and similar tablets: 768px to 1024px */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .App {
+    max-width: 95%;
+    padding: 1.5rem;
+  }
+
+  .pokemon-grid {
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 1.5rem;
+    justify-content: center;
+  }
+
+  .pokemon-card {
+    max-width: 180px;
+    padding: 16px;
+  }
+
+  .pokemon-card img {
+    width: 110px;
+    height: 110px;
+  }
+
+  .pokemon-card h3 {
+    font-size: 1.2rem;
+  }
+
+  .pokemon-detail {
+    max-width: 90%;
+    padding: 18px 12px;
+    transform: scale(0.95);
+    margin: 3vh auto 3vh 0;
+  }
+
+  .pokemon-detail img {
+    width: 140px;
+    height: 140px;
+  }
+
+  .pokemon-detail h2 {
+    font-size: 1.5rem;
+  }
+
+  .pokemon-detail p {
+    font-size: 1rem;
+  }
+
+  .pokemon-detail button {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}
