@@ -1,0 +1,132 @@
+import { useEffect, useState } from 'react'
+import './App.css'
+
+function App() {
+  const [pokemonList, setPokemonList] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedRegion, setSelectedRegion] = useState('all')
+  const [selectedType, setSelectedType] = useState('all')
+
+  useEffect(() => {
+    async function fetchPokemonWithTypes() {
+      try {
+        const res = await fetch('http://localhost:3001/api/pokemon')
+        const data = await res.json()
+
+        const detailedData = await Promise.all(
+          data.map(async (pokemon) => {
+            const res = await fetch(pokemon.url)
+            const details = await res.json()
+
+            return {
+              ...pokemon,
+              id: details.id,
+              types: details.types.map((t) => t.type.name),
+              imageUrl: details.sprites.front_default,
+            }
+          })
+        )
+
+        setPokemonList(detailedData)
+      } catch (err) {
+        console.error('💥 Failed to fetch Pokémon:', err)
+      }
+    }
+
+    fetchPokemonWithTypes()
+  }, [])
+
+  const regionLimits = {
+    kanto: [1, 151],
+    johto: [152, 251],
+    hoenn: [252, 386],
+    sinnoh: [387, 493],
+    unova: [494, 649],
+    kalos: [650, 721],
+    alola: [722, 809],
+    galar: [810, 898],
+    paldea: [899, 1010],
+  }
+
+  const filteredPokemon = pokemonList
+    .filter((p) =>
+      p.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((p) => {
+      if (selectedRegion === 'all') return true
+      const [min, max] = regionLimits[selectedRegion]
+      return p.id >= min && p.id <= max
+    })
+    .filter((p) => {
+      if (selectedType === 'all') return true
+      return p.types.includes(selectedType)
+    })
+
+  return (
+    <div className="App">
+      <h1>PookieDex</h1>
+
+      <div className="filters">
+        <input
+          type="text"
+          placeholder="Search Pokémon..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        <select
+          value={selectedRegion}
+          onChange={(e) => setSelectedRegion(e.target.value)}
+        >
+          <option value="all">🌍 All Regions</option>
+          <option value="kanto">Kanto</option>
+          <option value="johto">Johto</option>
+          <option value="hoenn">Hoenn</option>
+          <option value="sinnoh">Sinnoh</option>
+          <option value="unova">Unova</option>
+          <option value="kalos">Kalos</option>
+          <option value="alola">Alola</option>
+          <option value="galar">Galar</option>
+          <option value="paldea">Paldea</option>
+        </select>
+
+        <select
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <option value="all">🧃 All Types</option>
+          <option value="normal">Normal</option>
+          <option value="fire">Fire</option>
+          <option value="water">Water</option>
+          <option value="grass">Grass</option>
+          <option value="electric">Electric</option>
+          <option value="ice">Ice</option>
+          <option value="fighting">Fighting</option>
+          <option value="poison">Poison</option>
+          <option value="ground">Ground</option>
+          <option value="flying">Flying</option>
+          <option value="psychic">Psychic</option>
+          <option value="bug">Bug</option>
+          <option value="rock">Rock</option>
+          <option value="ghost">Ghost</option>
+          <option value="dark">Dark</option>
+          <option value="dragon">Dragon</option>
+          <option value="steel">Steel</option>
+          <option value="fairy">Fairy</option>
+        </select>
+      </div>
+
+      <div className="pokemon-grid">
+        {filteredPokemon.map((pokemon) => (
+          <div className="pokemon-card" key={pokemon.id}>
+            <img src={pokemon.imageUrl} alt={pokemon.name} />
+            <h3>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
+            <p className="poke-id">#{pokemon.id}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default App
