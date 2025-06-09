@@ -8,6 +8,9 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRegion, setSelectedRegion] = useState('all')
   const [selectedType, setSelectedType] = useState('all')
+  const [isLoading, setIsLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 20
 
   useEffect(() => {
     async function fetchPokemonWithTypes() {
@@ -37,8 +40,10 @@ function App() {
         )
 
         setPokemonList(detailedData)
+        setIsLoading(false)
       } catch (err) {
         console.error('💥 Failed to fetch Pokémon:', err)
+        setIsLoading(false)
       }
     }
 
@@ -58,9 +63,7 @@ function App() {
   }
 
   const filteredPokemon = pokemonList
-    .filter((p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter((p) => {
       if (selectedRegion === 'all') return true
       const [min, max] = regionLimits[selectedRegion]
@@ -71,6 +74,11 @@ function App() {
       return p.types.includes(selectedType)
     })
 
+  const indexOfLast = currentPage * itemsPerPage
+  const indexOfFirst = indexOfLast - itemsPerPage
+  const currentPokemon = filteredPokemon.slice(indexOfFirst, indexOfLast)
+  const totalPages = Math.ceil(filteredPokemon.length / itemsPerPage)
+
   return (
     <Router>
       <div className="App">
@@ -79,29 +87,48 @@ function App() {
           <Route
             path="/"
             element={
-              <>
-                <Filters
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                  selectedRegion={selectedRegion}
-                  setSelectedRegion={setSelectedRegion}
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
-                />
-                <div className="pokemon-grid">
-                  {filteredPokemon.map((pokemon) => (
-                    <Link
-                      to={`/pokemon/${pokemon.id}`}
-                      key={pokemon.id}
-                      className="pokemon-card"
-                    >
-                      <img src={pokemon.imageUrl} alt={pokemon.name} />
-                      <h3>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
-                      <p className="poke-id">#{pokemon.id}</p>
-                    </Link>
-                  ))}
+              isLoading ? (
+                <div className="loading-container">
+                  <div className="pokeball-spinner">⚪️</div>
+                  <p>Loading your Pookiédex...</p>
                 </div>
-              </>
+              ) : (
+                <>
+                  <Filters
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    selectedRegion={selectedRegion}
+                    setSelectedRegion={setSelectedRegion}
+                    selectedType={selectedType}
+                    setSelectedType={setSelectedType}
+                  />
+                  <div className="pokemon-grid">
+                    {currentPokemon.map((pokemon) => (
+                      <Link
+                        to={`/pokemon/${pokemon.id}`}
+                        key={pokemon.id}
+                        className="pokemon-card"
+                      >
+                        <img src={pokemon.imageUrl} alt={pokemon.name} />
+                        <h3>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h3>
+                        <p className="poke-id">#{pokemon.id}</p>
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="pagination">
+                  <span className="page-info">Page {currentPage} of {totalPages}</span>
+                  <div className="pagination-buttons">
+                    <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1}>
+                      ◀ Prev
+                    </button>
+                    <button onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>
+                      Next ▶
+                    </button>
+                  </div>
+                </div>
+
+                </>
+              )
             }
           />
 

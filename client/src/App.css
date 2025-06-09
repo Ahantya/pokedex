@@ -272,3 +272,65 @@ body, .pokemon-detail, .pokemon-card, h1, h2, h3, p, button {
     padding: 20px;
   }
 }
+
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  font-size: 1.2rem;
+  color: #2a75bb;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.pokeball-spinner {
+  font-size: 4rem;
+  animation: spinPokeball 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spinPokeball {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pagination {
+  margin-top: 30px;
+  text-align: center;
+  color: white;
+}
+
+.page-info {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 1px 1px 2px black;
+}
+
+.pagination-buttons button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  background-color: #ef5350; /* pokéball vibes */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pagination-buttons button:hover:not(:disabled) {
+  background-color: black;
+}
+
+.pagination-buttons button:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
