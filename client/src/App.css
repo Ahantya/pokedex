@@ -200,7 +200,7 @@ h1 {
   box-shadow: 0 6px 18px rgba(56, 142, 60, 0.6);
 }
 
-/* Responsive text scaling on smaller screens */
+
 @media (max-width: 480px) {
   .pokemon-detail {
     padding: 20px 15px;
