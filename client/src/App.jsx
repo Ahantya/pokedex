@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-r
 import './App.css'
 
 function App() {
-  const [pokemonList, setPokemonList] = useState([])
+  const [pokemonList, setPokemonList] = useState([]) /* set Pokemon list means it stores the pokemonList from wherever you call set */
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRegion, setSelectedRegion] = useState('all')
   const [selectedType, setSelectedType] = useState('all')
@@ -39,7 +39,7 @@ function App() {
           })
         )
 
-        setPokemonList(detailedData)
+        setPokemonList(detailedData) /* the set function is called here after calling the json file from backend */
         setIsLoading(false)
       } catch (err) {
         console.error('💥 Failed to fetch Pokémon:', err)
@@ -62,12 +62,12 @@ function App() {
     paldea: [899, 1010],
   }
 
-  const filteredPokemon = pokemonList
+  const filteredPokemon = pokemonList /* we are naming each pokemon as a variable p */
     .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()))
     .filter((p) => {
       if (selectedRegion === 'all') return true
       const [min, max] = regionLimits[selectedRegion]
-      return p.id >= min && p.id <= max
+      return p.id >= min && p.id <= max /* maps regionLimits list to id pulled from pokemon details */
     })
     .filter((p) => {
       if (selectedType === 'all') return true
@@ -197,15 +197,16 @@ function Filters({ searchTerm, setSearchTerm, selectedRegion, setSelectedRegion,
 }
 
 function PokemonDetail({ pokemonList }) {
-  const { id } = useParams()
-  const pokemon = pokemonList.find((p) => p.id === Number(id))
+  const { id } = useParams() /* grabs URL parameter named id so if you’re visiting /pokemon/25, then id will be "25" (a string!) */
+  const pokemon = pokemonList.find((p) => p.id === Number(id)) /* you then use it to find the Pokémon with that ID */
 
   if (!pokemon) {
-    return <p>Loading Pokémon data... 🥒⏳</p>
+    return <p color="black">Loading Pokémon data... ⏳</p>
   }
 
+  /* then deisplays the data  using pokemon info */
   return (
-    <div className="pokemon-detail">
+    <div className="pokemon-detail"> 
       <h2>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} #{pokemon.id}</h2>
       <img src={pokemon.imageUrl} alt={pokemon.name} />
       <p><strong>Types:</strong> {pokemon.types.join(', ')}</p>
