@@ -49,6 +49,9 @@ function App() {
 
     fetchPokemonWithTypes()
   }, [])
+  useEffect(() => {
+    setCurrentPage(1) // 🌟 reset to first page whenever filters change
+  }, [searchTerm, selectedRegion, selectedType])
 
   const regionLimits = {
     kanto: [1, 151],
