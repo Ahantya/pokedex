@@ -483,7 +483,7 @@ body, .pokemon-detail, .pokemon-card, h1, h2, h3, p, button {
 /* iPad and similar tablets: 768px to 1024px */
 @media (min-width: 769px) and (max-width: 1024px) {
   .App {
-    max-width: 95%;
+    max-width: 80%;
     padding: 1.5rem;
   }
 
