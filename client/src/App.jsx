@@ -10,6 +10,8 @@ function App() {
   const [selectedType, setSelectedType] = useState('all')
   const [isLoading, setIsLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
+  const [sortBy, setSortBy] = useState('id')
+  const [sortOrder, setSortOrder] = useState('asc')
   const itemsPerPage = 20
 
   useEffect(() => {
@@ -51,7 +53,7 @@ function App() {
   }, [])
   useEffect(() => {
     setCurrentPage(1) // reset to first page whenever filters change
-  }, [searchTerm, selectedRegion, selectedType])
+  }, [searchTerm, selectedRegion, selectedType, sortBy, sortOrder])
 
   const regionLimits = {
     kanto: [1, 151],
@@ -75,6 +77,14 @@ function App() {
     .filter((p) => {
       if (selectedType === 'all') return true
       return p.types.includes(selectedType)
+    })
+    .sort((a, b) => {
+      const fieldA = sortBy === 'name' ? a.name.toLowerCase() : a.id
+      const fieldB = sortBy === 'name' ? b.name.toLowerCase() : b.id
+  
+      if (fieldA < fieldB) return sortOrder === 'asc' ? -1 : 1
+      if (fieldA > fieldB) return sortOrder === 'asc' ? 1 : -1
+      return 0
     })
 
   const indexOfLast = currentPage * itemsPerPage
@@ -104,6 +114,10 @@ function App() {
                     setSelectedRegion={setSelectedRegion}
                     selectedType={selectedType}
                     setSelectedType={setSelectedType}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    sortOrder={sortOrder}
+                    setSortOrder={setSortOrder}
                   />
                   <div className="pokemon-grid">
                     {currentPokemon.map((pokemon) => (
@@ -145,7 +159,8 @@ function App() {
   )
 }
 
-function Filters({ searchTerm, setSearchTerm, selectedRegion, setSelectedRegion, selectedType, setSelectedType }) {
+function Filters({ searchTerm, setSearchTerm, selectedRegion, setSelectedRegion, selectedType, setSelectedType, sortBy, setSortBy,
+  sortOrder, setSortOrder }) {
   return (
     <div className="filters">
       <input
@@ -195,6 +210,17 @@ function Filters({ searchTerm, setSearchTerm, selectedRegion, setSelectedRegion,
         <option value="steel">Steel</option>
         <option value="fairy">Fairy</option>
       </select>
+
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+        <option value="id">Sort by ID</option>
+        <option value="name">Sort by Name</option>
+      </select>
+
+  <select value={sortOrder} onChange={(e) => setSortOrder(e.target.value)}>
+    <option value="asc">⬆️ Ascending</option>
+    <option value="desc">⬇️ Descending</option>
+  </select>
+
     </div>
   )
 }
