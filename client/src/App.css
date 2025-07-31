@@ -243,7 +243,7 @@ h1 {
 
   /* MOBILE CARD UPGRADE - bigger, centered cards */
   .pokemon-grid {
-    grid-template-columns: 1fr; /* single column for max center */
+    grid-template-columns: 1fr !important; /* single column for max center */
     gap: 1.5rem;
     justify-items: center; /* center horizontally */
   }
