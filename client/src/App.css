@@ -248,12 +248,6 @@ h1 {
     justify-items: center; /* center horizontally */
   }
 
-  .search-bar {
-    width: 90% !important;
-    font-size: 0.9rem;
-    padding: 0.5rem 0.8rem;
-    border-radius: 6px;
-  }
 
   .pokemon-card {
     max-width: 280px; /* bigger card */
@@ -483,6 +477,13 @@ body, .pokemon-detail, .pokemon-card, h1, h2, h3, p, button {
 
   .page-info {
     font-size: 1rem;
+  }
+
+  .search-bar {
+    width: 90% !important;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
   }
 }
 
