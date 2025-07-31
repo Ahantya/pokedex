@@ -17,7 +17,7 @@ function App() {
   useEffect(() => {
     async function fetchPokemonWithTypes() {
       try {
-        const res = await fetch('/api/pokemon.js')
+        const res = await fetch('/api/pokemon')
         const data = await res.json()
 
         const detailedData = await Promise.all(
