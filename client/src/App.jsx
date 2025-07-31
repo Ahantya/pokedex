@@ -95,7 +95,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <h1>PookieDex</h1>
+        <h1>PookieDex by Ahantya</h1>
         <Routes>
           <Route
             path="/"
