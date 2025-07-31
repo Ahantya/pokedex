@@ -249,7 +249,7 @@ h1 {
   }
 
   .search-bar {
-    width: 90%;
+    width: 90% !important;
     font-size: 0.9rem;
     padding: 0.5rem 0.8rem;
     border-radius: 6px;
