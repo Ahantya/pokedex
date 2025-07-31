@@ -237,7 +237,7 @@ h1 {
 
   .filters input[type="text"],
   .filters select {
-    width: 100%;
+    width: 91%;
     min-width: unset;
   }
 
@@ -479,12 +479,6 @@ body, .pokemon-detail, .pokemon-card, h1, h2, h3, p, button {
     font-size: 1rem;
   }
 
-  .search-bar {
-    width: 90% !important;
-    font-size: 0.9rem;
-    padding: 0.5rem 0.8rem;
-    border-radius: 6px;
-  }
 }
 
 
